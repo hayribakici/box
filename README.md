@@ -13,21 +13,24 @@ The simplest usage would be to wrap three colons `:::` with the `{.box}` attribu
 ```markdown
 :::{.box}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+clita kasd gubergren.
 
 :::
 ```
 
 Resulting in
 
-![]()
+<img src="https://github.com/hayribakici/box/assets/3295340/71f1b8c1-dbfb-4e21-aeae-5a54468910ce" width="300px" />
 
 ### Options
 
 You can add titles and define fill and border colors with
 
 ```markdown
-:::{.box fillcolor="#ababab" bordercolor="#ffffff"}
+:::{.box fillcolor="#ababab" bordercolor="#000000"}
 > Your title as a blockquote followed by an empty line
 
 Your regular markdown content here such as
@@ -58,6 +61,8 @@ and enumerations
 
 :::
 ```
+
+
 
 This pandoc filter is basically wrapping a `tcolorbox` around the text in markdown and provides the options:
 
