@@ -88,4 +88,5 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
   Any help here is appreciated.
 
 2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, you can create a issue for that.
+3. If you have your own `header-includes` file, you need to import `tcolorbox` with `\usepackage{tcolorbox}`.
 
