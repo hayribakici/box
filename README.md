@@ -1,16 +1,26 @@
 # box
 
-Create a box around some text.
+Pandoc lua-filter that creates a box around some text.
+
+## Run 
+
+Run this filter e.g. with `pandoc sample.md --lua-filter=box.lua --output=sample.pdf`.
 
 ## Usage
+
+The simplest usage would be to wrap three colons `:::` with the `{.box}` attribute around some text. `box` creates a box around it with the default border and fill color of `tcolorbox` (see [sample.pdf](https://github.com/hayribakici/box/blob/main/sample.pdf)).
 
 ```markdown
 :::{.box}
 
-Your text here
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
 
 :::
 ```
+
+Resulting in
+
+![]()
 
 ### Options
 
@@ -59,17 +69,17 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
 1. So far the display of images are not supported. Latex throws an error message
 
-```terminal
-! LaTeX Error: Not in outer par mode.
+  ```terminal
+  ! LaTeX Error: Not in outer par mode.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
+  See the LaTeX manual or LaTeX Companion for explanation.
+  Type  H <return>  for immediate help.
+   ...                                              
                                                   
-l.108 \centering
-```
+  l.108 \centering
+  ```
 
-Any help here is appreciated.
+  Any help here is appreciated.
 
 2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, you can create a issue for that.
 

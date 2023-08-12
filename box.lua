@@ -43,14 +43,14 @@ local function process(div)
   local latexFillColorCmd = ''
   local latexBorderColorCmd = ''
   if (fillColor ~= nil) then
-    local fillColorName = randomString()
-    latexFillColorCmd = string.format('\\definecolor{%s}{HTML}{%s}', fillColorName, fillColor:gsub("#", ""):upper())
-    table.insert(options, 'colback='..fillColorName)
+    local fc = fillColor:gsub('#', '')
+    latexFillColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', fc, fc:upper())
+    table.insert(options, 'colback=c_'..fc)
   end
   if (borderColor ~= nil) then
-    local borderColorName = randomString()
-    latexBorderColorCmd = string.format('\\definecolor{%s}{HTML}{%s}', borderColorName, borderColor:gsub("#", ""):upper())
-    table.insert(options, 'colframe='..borderColorName)
+    local bc = borderColor:gsub('#', '')
+    latexBorderColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', bc, bc:upper())
+    table.insert(options, 'colframe=c_'..bc)
   end
   if (not isempty(title)) then
     table.insert(options, string.format("title=%s", title))
