@@ -17,14 +17,6 @@ local function popAttrFromDiv(div, name)
   return color
 end
 
-local function randomString()
-  local r = ""
-  for i = 1, 5 do
-    r = r .. string.char(math.random(65, 65 + 25)):lower()
-  end
-  return r
-end
-
 local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
