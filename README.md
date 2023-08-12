@@ -62,6 +62,7 @@ and enumerations
 :::
 ```
 
+<img width="300" src="https://github.com/hayribakici/box/assets/3295340/8e6f7f24-72d8-4f7c-ada3-8d135e6ea186" />
 
 
 This pandoc filter is basically wrapping a `tcolorbox` around the text in markdown and provides the options:
