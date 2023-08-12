@@ -21,7 +21,7 @@ local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
 
-  local title = ""
+  local title = ''
   if div.content[1].t == "BlockQuote" then
     title = pandoc.utils.stringify(table.remove(div.content, 1))
   end
@@ -34,18 +34,18 @@ local function process(div)
   local options = { }
   local latexFillColorCmd = ''
   local latexBorderColorCmd = ''
-  if (fillColor ~= nil) then
+  if (not isempty(fillColor)) then
     local fc = fillColor:gsub('#', '')
     latexFillColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', fc, fc:upper())
     table.insert(options, 'colback=c_'..fc)
   end
-  if (borderColor ~= nil) then
+  if (not isempty(borderColor)) then
     local bc = borderColor:gsub('#', '')
     latexBorderColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', bc, bc:upper())
     table.insert(options, 'colframe=c_'..bc)
   end
   if (not isempty(title)) then
-    table.insert(options, string.format("title=%s", title))
+    table.insert(options, 'title='..title)
   end
 
   local result = {
