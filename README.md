@@ -68,9 +68,13 @@ and enumerations
 
 This pandoc filter is basically wrapping a `tcolorbox` around the text in markdown and provides the options:
 
+- the title set by the first blockquote paragraph (see below on [Caveats](#caveats) when you only want to put a quote inside the box)
+- a lower part set by the last blockquote
 - **fillcolor**: the background color of the box. Only supports html colors.
 - **bordercolor**: the framecolor of the box. Only supports html colors.
-- The title is set by the first paragraph.
+- **type**: the type of box this should be. Valid values are `important`, `danger`, `info` and `warning`. 
+
+<img src="" width="300px" />
 
 ## Caveats
 

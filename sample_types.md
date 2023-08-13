@@ -28,6 +28,6 @@ This is important
 
 :::{.box bordercolor="#f10000" type="astd"}
 
-Wrong type
+Wrong type, using bordercolor here instead
 
 :::
