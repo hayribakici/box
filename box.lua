@@ -29,7 +29,8 @@ local function containsAttribute(div, name)
   return div.attr.attributes[name] ~= nil
 end
 
--- returns a color based on the box type or 
+-- returns a color based on the box type or an empty string
+-- from https://stackoverflow.com/questions/37447704/what-is-the-alternative-for-switch-statement-in-lua-language
 local function getColorFromType(type)
   case = {
     ['warning'] = function () 
