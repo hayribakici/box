@@ -25,6 +25,35 @@ local function popAttrFromDiv(div, name)
   return color
 end
 
+local function containsAttribute(div, name)
+  return div.attr.attributes[name] ~= nil
+end
+
+-- returns a color based on the box type or 
+local function getColorFromType(type)
+  case = {
+    ['warning'] = function () 
+                    return "#E3C414"
+                  end,
+    ['info'] = function ()
+                    return "#7289DA"
+                end,
+    ['danger'] = function ()
+                    return "#ce2029"
+                  end,
+    ['important'] = function () 
+                    return "#00a86b"
+                  end,
+    default = function ()
+                    return ''
+              end,
+  }
+  if (case[type]) then
+    return case[type]()
+  end
+  return case['default']()
+end
+
 local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
@@ -33,13 +62,20 @@ local function process(div)
   local bottom = popStringifiedBlockQuoteElementFromDiv(div, #div.content)
     
   local content = div.content
-
-  local boxType = popAttrFromDiv(div, 'type')
-  -- https://stackoverflow.com/questions/37447704/what-is-the-alternative-for-switch-statement-in-lua-language
-
+  
   local fillColor = popAttrFromDiv(div, 'fillcolor')
   local borderColor = popAttrFromDiv(div, 'bordercolor')
-
+  if (containsAttribute(div, 'type')) then
+    local value = popAttrFromDiv(div, 'type')
+    local color = getColorFromType(value)
+    if (isempty(color)) then
+      print(string.format('[Warning] type %s is not valid. Trying to use the \'bordercolor\' value', value))
+    else
+      -- overriding the bordercolor attribute
+      borderColor = color
+    end
+  end
+  
   local options = { }
   local latexFillColorCmd = ''
   local latexBorderColorCmd = ''
