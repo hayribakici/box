@@ -74,7 +74,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 - **bordercolor**: the framecolor of the box. Only supports html colors.
 - **type**: the type of box this should be. Valid values are `important`, `danger`, `info`, `plain` and `warning`. 
 
-<img src="" width="300px" />
+<img src="https://github.com/hayribakici/box/assets/3295340/21b49977-36c7-4fa8-b957-7703ab018df6" width="300px" />
 
 ## Caveats
 
