@@ -31,3 +31,9 @@ This is important
 Wrong type, using bordercolor here instead
 
 :::
+
+:::{.box type="plain"}
+
+A plain box
+
+:::

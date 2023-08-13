@@ -44,6 +44,9 @@ local function getColorFromType(type)
     ['important'] = function () 
                     return "#00a86b"
                   end,
+    ['plain'] = function ()
+                    return "#ffffff"
+                end,
     default = function ()
                     return ''
               end,

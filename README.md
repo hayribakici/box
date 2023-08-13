@@ -72,7 +72,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 - a lower part set by the last blockquote
 - **fillcolor**: the background color of the box. Only supports html colors.
 - **bordercolor**: the framecolor of the box. Only supports html colors.
-- **type**: the type of box this should be. Valid values are `important`, `danger`, `info` and `warning`. 
+- **type**: the type of box this should be. Valid values are `important`, `danger`, `info`, `plain` and `warning`. 
 
 <img src="" width="300px" />
 
