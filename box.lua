@@ -10,6 +10,14 @@ local function isempty(s)
   return s == nil or s == ''
 end
 
+local function popStringifiedBlockQuoteElementFromDiv(div, index)
+  local elem = ''
+  if div.content[index].t == "BlockQuote" then
+    elem = pandoc.utils.stringify(table.remove(div.content, index))
+  end
+  return elem
+end
+
 local function popAttrFromDiv(div, name)
   -- can be nil
   local color = div.attr.attributes[name] or nil
@@ -21,11 +29,9 @@ local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
 
-  local title = ''
-  if div.content[1].t == "BlockQuote" then
-    title = pandoc.utils.stringify(table.remove(div.content, 1))
-  end
-
+  local title = popStringifiedBlockQuoteElementFromDiv(div, 1)
+  local bottom = popStringifiedBlockQuoteElementFromDiv(div, #div.content)
+    
   local content = div.content
 
   local fillColor = popAttrFromDiv(div, 'fillcolor')
@@ -55,6 +61,10 @@ local function process(div)
   }
   for i = 1, #content do
     table.insert(result, content[i])
+  end
+  if (not isempty(bottom)) then
+    table.insert(result, raw_tex('\\tcblower'))
+    table.insert(result, pandoc.Para(bottom))
   end
   table.insert(result, raw_tex('\\end{tcolorbox}'))
   return result

@@ -59,6 +59,8 @@ and enumerations
 2. second
 3. third
 
+> The last line as a blockquote results in adding a lower part of the box.
+
 :::
 ```
 
@@ -89,4 +91,17 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
 2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, you can create a issue for that.
 3. If you have your own `header-includes` file, you need to import `tcolorbox` with `\usepackage{tcolorbox}`.
+4. If you only want to put a quote `>` into a box consider adding an empty title and empty bottom quote like this:
+
+:::{.box}
+>
+
+> I think therefore I am
+
+>
+:::
+
+Resulting in this:
+
+<img src="" width="300px" />
 
