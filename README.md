@@ -112,7 +112,6 @@ Resulting in this:
 
 ## Future ideas
 
-- add some box types (e.g. `info`, `warning`, `danger`, `important`) and color the boxes acccordingly (like [admonition](https://github.com/javalent/admonitions))
 - change the syntax of this filter in admonition
 - allow identification with `crossref` 
 
