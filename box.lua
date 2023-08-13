@@ -34,6 +34,9 @@ local function process(div)
     
   local content = div.content
 
+  local boxType = popAttrFromDiv(div, 'type')
+  -- https://stackoverflow.com/questions/37447704/what-is-the-alternative-for-switch-statement-in-lua-language
+
   local fillColor = popAttrFromDiv(div, 'fillcolor')
   local borderColor = popAttrFromDiv(div, 'bordercolor')
 
