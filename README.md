@@ -88,8 +88,8 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
   Any help here is appreciated.
 
-2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, you can create a issue for that.
-3. If you have your own `header-includes` file, you need to import `tcolorbox` with `\usepackage{tcolorbox}`.
+2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, any PR redarding this issue is welcome.
+3. If you have your own `header-includes` file, you need to additionally import `tcolorbox` with `\usepackage{tcolorbox}`.
 4. If you only want to put a quote `>` into a box consider adding an empty title and empty bottom quote like this:
 
 ```markdown
