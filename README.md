@@ -64,8 +64,7 @@ and enumerations
 :::
 ```
 
-<img width="300" src="https://github.com/hayribakici/box/assets/3295340/8e6f7f24-72d8-4f7c-ada3-8d135e6ea186" />
-
+<img width="300" src="https://github.com/hayribakici/box/assets/3295340/03b9b880-d60d-4104-aa38-ccbe0a713e39" />
 
 This pandoc filter is basically wrapping a `tcolorbox` around the text in markdown and provides the options:
 
@@ -93,6 +92,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 3. If you have your own `header-includes` file, you need to import `tcolorbox` with `\usepackage{tcolorbox}`.
 4. If you only want to put a quote `>` into a box consider adding an empty title and empty bottom quote like this:
 
+```markdown
 :::{.box}
 >
 
@@ -100,8 +100,14 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
 >
 :::
+```
 
 Resulting in this:
 
-<img src="" width="300px" />
+<img src="https://github.com/hayribakici/box/assets/3295340/2d646810-b750-44ce-ac17-873217f05d40" width="300px" />
+
+## Future ideas
+
+- add some box types (e.g. `info`, `warning`, `danger`, `important`) and color the boxes acccordingly (like [admonition](https://github.com/javalent/admonitions))
+- change the syntax of this filter in admonition
 
