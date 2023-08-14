@@ -2,7 +2,7 @@
 -- Copyright (C) 2023 Onur Hayri Bakici, released under MIT license
 
 
-function raw_tex(t)
+local function raw_tex(t)
   return pandoc.RawBlock('tex', t)
 end
 
@@ -32,8 +32,8 @@ end
 -- returns a color based on the box type or an empty string
 -- from https://stackoverflow.com/questions/37447704/what-is-the-alternative-for-switch-statement-in-lua-language
 local function getColorFromType(type)
-  case = {
-    ['warning'] = function () 
+  local case = {
+    ['warning'] = function ()
                     return "#E3C414"
                   end,
     ['info'] = function ()
@@ -42,7 +42,7 @@ local function getColorFromType(type)
     ['danger'] = function ()
                     return "#ce2029"
                   end,
-    ['important'] = function () 
+    ['important'] = function ()
                     return "#00a86b"
                   end,
     ['plain'] = function ()
@@ -64,9 +64,9 @@ local function process(div)
 
   local title = popStringifiedBlockQuoteElementFromDiv(div, 1)
   local bottom = popStringifiedBlockQuoteElementFromDiv(div, #div.content)
-    
+
   local content = div.content
-  
+
   local fillColor = popAttrFromDiv(div, 'fillcolor')
   local borderColor = popAttrFromDiv(div, 'bordercolor')
   if (containsAttribute(div, 'type')) then
@@ -79,7 +79,7 @@ local function process(div)
       borderColor = color
     end
   end
-  
+
   local options = { }
   local latexFillColorCmd = ''
   local latexBorderColorCmd = ''
