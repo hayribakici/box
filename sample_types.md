@@ -37,3 +37,8 @@ Wrong type, using bordercolor here instead
 A plain box
 
 :::
+
+<!-- an empty box -->
+:::{.box type="plain"}
+
+:::

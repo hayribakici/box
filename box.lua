@@ -12,6 +12,9 @@ end
 
 local function popStringifiedBlockQuoteElementFromDiv(div, index)
   local elem = ''
+  if (#div.content == 0) then 
+    return elem
+  end
   if div.content[index].t == "BlockQuote" then
     elem = pandoc.utils.stringify(table.remove(div.content, index))
   end
