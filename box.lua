@@ -2,6 +2,16 @@
 -- Copyright (C) 2023 Onur Hayri Bakici, released under MIT license
 
 
+local classColors = {
+  warning = '#E3C414',
+  info = '#7289DA',
+  danger = '#ce2029',
+  important = '#00a86b',
+  -- note = '',
+  plain = '#ffffff',
+  default = ''
+}
+
 local function raw_tex(t)
   return pandoc.RawBlock('tex', t)
 end
@@ -10,13 +20,14 @@ local function isempty(s)
   return s == nil or s == ''
 end
 
-local function popStringifiedBlockQuoteElementFromDiv(div, index)
+local function popAndStripBlockQuoteElementFromDiv(div, index)
   local elem = ''
-  if (#div.content == 0) then 
+  if (#div.content == 0) then
     return elem
   end
   if div.content[index].t == "BlockQuote" then
-    elem = pandoc.utils.stringify(table.remove(div.content, index))
+    -- return the contents of the BlockQuote
+    elem = table.remove(div.content, index).c[1]
   end
   return elem
 end
@@ -28,59 +39,41 @@ local function popAttrFromDiv(div, name)
   return color
 end
 
-local function containsAttribute(div, name)
-  return div.attr.attributes[name] ~= nil
+local function getColorFromClass(class)
+   if (classColors[class]) then
+    return classColors[class]
+  end
+  print(string.format('[Warning] invalid admonition type %s. Setting to default', class))
+  return classColors['default']
 end
 
--- returns a color based on the box type or an empty string
--- from https://stackoverflow.com/questions/37447704/what-is-the-alternative-for-switch-statement-in-lua-language
-local function getColorFromType(type)
-  local case = {
-    ['warning'] = function ()
-                    return "#E3C414"
-                  end,
-    ['info'] = function ()
-                    return "#7289DA"
-                end,
-    ['danger'] = function ()
-                    return "#ce2029"
-                  end,
-    ['important'] = function ()
-                    return "#00a86b"
-                  end,
-    ['plain'] = function ()
-                    return "#ffffff"
-                end,
-    default = function ()
-                    return ''
-              end,
-  }
-  if (case[type]) then
-    return case[type]()
+-- returns two values, if it is in the class and its name
+local function isInAdmonitionMode(div)
+  for i = 0, #div.attr.classes do
+    if (not isempty(div.attr.classes[i])) then
+      return true, div.attr.classes[i]
+    end
   end
-  return case['default']()
+  return false, ''
 end
 
 local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
 
-  local title = popStringifiedBlockQuoteElementFromDiv(div, 1)
-  local bottom = popStringifiedBlockQuoteElementFromDiv(div, #div.content)
+  local title = popAndStripBlockQuoteElementFromDiv(div, 1)
+  local bottom = popAndStripBlockQuoteElementFromDiv(div, #div.content)
 
-  local content = div.content
+  local fillColor
+  local borderColor
+  local admonitionMode, class = isInAdmonitionMode(div)
 
-  local fillColor = popAttrFromDiv(div, 'fillcolor')
-  local borderColor = popAttrFromDiv(div, 'bordercolor')
-  if (containsAttribute(div, 'type')) then
-    local value = popAttrFromDiv(div, 'type')
-    local color = getColorFromType(value)
-    if (isempty(color)) then
-      print(string.format('[Warning] type %s is not valid. Trying to use the \'bordercolor\' value', value))
-    else
-      -- overriding the bordercolor attribute
-      borderColor = color
-    end
+  if (admonitionMode) then
+    print('mode: '..class)
+    borderColor = getColorFromClass(class)
+  else
+    fillColor = popAttrFromDiv(div, 'fillcolor')
+    borderColor = popAttrFromDiv(div, 'bordercolor')
   end
 
   local options = { }
@@ -97,7 +90,7 @@ local function process(div)
     table.insert(options, 'colframe=c_'..bc)
   end
   if (not isempty(title)) then
-    table.insert(options, 'title='..title)
+    table.insert(options, 'title='..pandoc.utils.stringify(title))
   end
 
   local result = {
@@ -105,12 +98,14 @@ local function process(div)
     raw_tex(latexBorderColorCmd),
     raw_tex(string.format('\\begin{tcolorbox}[%s]', table.concat(options, ','))),
   }
+
+  local content = div.content or ''
   for i = 1, #content do
     table.insert(result, content[i])
   end
   if (not isempty(bottom)) then
     table.insert(result, raw_tex('\\tcblower'))
-    table.insert(result, pandoc.Para(bottom))
+    table.insert(result, bottom)
   end
   table.insert(result, raw_tex('\\end{tcolorbox}'))
   return result

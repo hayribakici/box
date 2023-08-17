@@ -1,44 +1,46 @@
-:::{.box type="warning"}
-> Be careful!
+:::{.box .warning}
+> **Be careful!**
 
 This is a warning
 
+> __OMG!__
+
 :::
 
-:::{.box type="info"}
-> Information
+:::{.box .info}
+> __Information__
 
 This is an info
 
 :::
 
-:::{.box type="important"}
+:::{.box .important}
 > Dont't forget
 
 This is important
 
 :::
 
-:::{.box type="danger"}
+:::{.box .danger}
 > Watch out!
 
 !DANGER!
 
 :::
 
-:::{.box bordercolor="#f10000" type="astd"}
+:::{.box .astd}
 
-Wrong type, using bordercolor here instead
+Wrong type, using default bordercolor here instead
 
 :::
 
-:::{.box type="plain"}
+:::{.box .plain}
 
 A plain box
 
 :::
 
 <!-- an empty box -->
-:::{.box type="plain"}
+:::{.box .plain}
 
 :::
