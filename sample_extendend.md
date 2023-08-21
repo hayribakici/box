@@ -1,3 +1,5 @@
+## Boxes with admonition
+
 :::{.box .warning}
 > **Be careful!**
 
@@ -42,5 +44,13 @@ A plain box
 
 <!-- an empty box -->
 :::{.box .plain}
+
+:::
+
+## Boxes with latex colors
+
+:::{.box fillcolor=blue!10!white}
+
+A box with latex colors
 
 :::

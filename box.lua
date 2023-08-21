@@ -20,6 +20,12 @@ local function isempty(s)
   return s == nil or s == ''
 end
 
+-- checks whether string starts with a character c
+local function startsWith(s, c)
+  local pos = string.find(s, c)
+  return pos ~= nil and pos == 1
+end
+
 local function popAndStripBlockQuoteElementFromDiv(div, index)
   local elem = ''
   if (#div.content == 0) then
@@ -40,7 +46,7 @@ local function popAttrFromDiv(div, name)
 end
 
 local function getColorFromClass(class)
-   if (classColors[class]) then
+  if (classColors[class]) then
     return classColors[class]
   end
   print(string.format('[Warning] invalid admonition type %s. Setting to default', class))
@@ -57,6 +63,15 @@ local function isInAdmonitionMode(div)
   return false, ''
 end
 
+-- returns a tuple, the color defition
+-- for latex and its name 'c_<htmlColor>'
+local function getColorNameDefinitionTuple(htmlColor)
+  local c = htmlColor:gsub('#', '')
+  local latexCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', c, c:upper())
+  local colorName = 'c_' .. c
+  return latexCmd, colorName
+end
+
 local function process(div)
   if div.attr.classes[1] ~= "box" then return nil end
   table.remove(div.attr.classes, 1)
@@ -69,28 +84,35 @@ local function process(div)
   local admonitionMode, class = isInAdmonitionMode(div)
 
   if (admonitionMode) then
-    print('mode: '..class)
     borderColor = getColorFromClass(class)
   else
     fillColor = popAttrFromDiv(div, 'fillcolor')
     borderColor = popAttrFromDiv(div, 'bordercolor')
   end
 
-  local options = { }
+  local options = {}
   local latexFillColorCmd = ''
   local latexBorderColorCmd = ''
   if (not isempty(fillColor)) then
-    local fc = fillColor:gsub('#', '')
-    latexFillColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', fc, fc:upper())
-    table.insert(options, 'colback=c_'..fc)
+    local fcName = ''
+    if (startsWith(fillColor, '#')) then
+      latexFillColorCmd, fcName = getColorNameDefinitionTuple(fillColor)
+    else
+      fcName = fillColor
+    end
+    table.insert(options, 'colback=' .. fcName)
   end
   if (not isempty(borderColor)) then
-    local bc = borderColor:gsub('#', '')
-    latexBorderColorCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', bc, bc:upper())
-    table.insert(options, 'colframe=c_'..bc)
+    local bcName = ''
+    if (startsWith(borderColor, '#')) then
+      latexBorderColorCmd, bcName = getColorNameDefinitionTuple(borderColor)
+    else
+      bcName = borderColor
+    end
+    table.insert(options, 'colframe=' .. bcName)
   end
   if (not isempty(title)) then
-    table.insert(options, 'title='..pandoc.utils.stringify(title))
+    table.insert(options, 'title=' .. pandoc.utils.stringify(title))
   end
 
   local result = {
