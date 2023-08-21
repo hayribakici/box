@@ -40,9 +40,9 @@ end
 
 local function popAttrFromDiv(div, name)
   -- can be nil
-  local color = div.attr.attributes[name] or nil
+  local attr = div.attr.attributes[name] or nil
   div.attr.attributes[name] = nil
-  return color
+  return attr
 end
 
 local function getColorFromClass(class)
@@ -79,8 +79,8 @@ local function process(div)
   local title = popAndStripBlockQuoteElementFromDiv(div, 1)
   local bottom = popAndStripBlockQuoteElementFromDiv(div, #div.content)
 
-  local fillColor
-  local borderColor
+  local fillColor = ''
+  local borderColor = ''
   local admonitionMode, class = isInAdmonitionMode(div)
 
   if (admonitionMode) then

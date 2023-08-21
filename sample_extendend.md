@@ -54,3 +54,9 @@ A plain box
 A box with latex colors
 
 :::
+
+:::{.box fillcolor=olive}
+
+Olive
+
+:::
