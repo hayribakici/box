@@ -81,7 +81,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
 ## Caveats
 
-1. So far the display of images are not supported. Latex throws an error message
+1. So far the display of **images with captions** are not supported, since pandoc centers every image once it has a caption. Latex throws an error message
 
   ```terminal
   ! LaTeX Error: Not in outer par mode.
@@ -93,7 +93,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
   l.108 \centering
   ```
 
-  Any help here is appreciated.
+  There are some [semi optimal](https://stackoverflow.com/questions/26530313/remove-hide-figure-caption-below-knitted-markdown-pandoc-plot) solutions to this, though.
 
 2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, any PR redarding this issue is welcome.
 
