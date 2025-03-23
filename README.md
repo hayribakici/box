@@ -129,5 +129,8 @@ Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a 
 ```markdown
 > [!todo] To Do
 > - [ ] Pick up Milk
-
 ```
+
+### Run
+
+Run this filter e.g. with `pandoc sample_callout.md --lua-filter=pandoc-callout-box.lua --output=sample_callout.pdf`.
