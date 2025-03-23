@@ -124,8 +124,6 @@ Resulting in this:
 
 ## pandoc-callout-box
 
-## pandoc-div-box
-
 Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a box around text (see [sample_callout.pdf](https://github.com/hayribakici/box/blob/main/samples/sample_callout.pdf)). All types are supported (see obsidian's webpage).
 
 ```markdown
