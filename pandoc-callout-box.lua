@@ -2,6 +2,7 @@
 -- Copyright (C) 2025 Onur Hayri Bakici, released under MIT license
 
 local color_utils = require("color_utils")
+local box_utils = require("box_utils")
 
 local classColors = {
     info = '#E6F0FC',
@@ -46,46 +47,6 @@ local classColors = {
     bug = '#FDEAEC'
 }
 
-local function raw_tex(t)
-    return pandoc.RawBlock('tex', t)
-end
-
-local function isempty(s)
-    return s == nil or s == ''
-end
-
--- checks whether string starts with a character c
-local function startsWith(s, c)
-    local pos = string.find(s, c)
-    return pos ~= nil and pos == 1
-end
-
-local function sublist(list, startPos, endPos)
-    local sub = {}
-    local len = #list
-    -- Default to the length of the list if endPosition is nil
-    endPos = endPos or len
-    if startPos >= endPos then
-        return sub
-    end
-    if startPos > len or endPos > len then
-        return sub
-    end
-    for i = startPos, endPos do
-        table.insert(sub, list[i])
-    end
-    return sub
-end
-
-local function find_element_at(pandoc_list, pred)
-    for i, el in ipairs(pandoc_list) do
-        if pred(el) then
-            return i
-        end
-    end
-    return -1
-end
-
 -- Returns the stringified first line and the rest
 -- of the BlockQuote
 local function split_to_first_line_and_rest(elem)
@@ -95,39 +56,21 @@ local function split_to_first_line_and_rest(elem)
     local firstParagraph = elem.c:remove(1)
     if firstParagraph.t == "Para" then
         local paragraphContent = firstParagraph.c
-        local indexSoftBreak = find_element_at(paragraphContent, function(item)
+        local indexSoftBreak = box_utils.find_element_at(paragraphContent, function(item)
             return item and item.tag == 'SoftBreak'
         end)
         if indexSoftBreak == -1 then
             -- Return the first line
             return pandoc.utils.stringify(paragraphContent), nil
         end
-        local firstLine = pandoc.utils.stringify(sublist(paragraphContent, 1, indexSoftBreak))
+        local firstLine = pandoc.utils.stringify(box_utils.sublist(paragraphContent, 1, indexSoftBreak))
         local rest = pandoc.List:new({
-            pandoc.Para(sublist(paragraphContent, indexSoftBreak + 1))
+            pandoc.Para(box_utils.sublist(paragraphContent, indexSoftBreak + 1))
         })
         rest:extend(elem.c)
 
         return firstLine, rest
     end
-end
-
-
-local function getColorFromClass(class)
-    if (classColors[class]) then
-        return classColors[class]
-    end
-    print(string.format('[Warning] invalid admonition type %s. Setting to info', class))
-    return classColors['info']
-end
-
--- returns a tuple, the color defition
--- for latex and its name 'c_<htmlColor>'
-local function getColorNameDefinitionTuple(htmlColor)
-    local c = htmlColor:gsub('#', '')
-    local latexCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', c, c:upper())
-    local colorName = 'c_' .. c
-    return latexCmd, colorName
 end
 
 -- Returns the given admonition class and title, if applicable
@@ -146,60 +89,60 @@ local function process(div)
     if div.t ~= 'BlockQuote' then return nil end
     local firstLine, rest = split_to_first_line_and_rest(div)
     local class, title = split_admonition_class_and_title(firstLine)
-    if isempty(title) then
+    if box_utils.isempty(title) then
         title = class:gsub("^%l", string.upper)
     end
-    local fillColor = getColorFromClass(class)
-    local borderColor = getColorFromClass(class)
+    local fillColor = box_utils.getColorFromClass(class, classColors)
+    local borderColor = box_utils.getColorFromClass(class, classColors)
     local titleColor = color_utils.darkenHexColor(fillColor, 0.5)
     -- print(titleColor)
     local options = {}
     local latexFillColorCmd = ''
     local latexBorderColorCmd = ''
     local latexTitleColorCmd = ''
-    if (not isempty(fillColor)) then
+    if not box_utils.isempty(fillColor) then
         local fcName = ''
         local tcName = ''
-        if (startsWith(fillColor, '#')) then
-            latexFillColorCmd, fcName = getColorNameDefinitionTuple(fillColor)
-            latexTitleColorCmd, tcName = getColorNameDefinitionTuple(titleColor)
+        if (box_utils.startsWith(fillColor, '#')) then
+            latexFillColorCmd, fcName = box_utils.getColorNameDefinitionTuple(fillColor)
+            latexTitleColorCmd, tcName = box_utils.getColorNameDefinitionTuple(titleColor)
         else
             fcName = fillColor
         end
         table.insert(options, 'colback=' .. fcName)
         table.insert(options, 'coltitle=' .. tcName)
     end
-    if (not isempty(borderColor)) then
+    if not box_utils.isempty(borderColor) then
         local bcName = ''
-        if (startsWith(borderColor, '#')) then
-            latexBorderColorCmd, bcName = getColorNameDefinitionTuple(borderColor)
+        if (box_utils.startsWith(borderColor, '#')) then
+            latexBorderColorCmd, bcName = box_utils.getColorNameDefinitionTuple(borderColor)
         else
             bcName = borderColor
         end
         table.insert(options, 'colframe=' .. bcName)
     end
-    if (not isempty(title)) then
+    if not box_utils.isempty(title) then
         table.insert(options, 'title=' .. pandoc.utils.stringify(title))
     end
 
     local result = {
-        raw_tex(latexTitleColorCmd),
-        raw_tex(latexFillColorCmd),
-        raw_tex(latexBorderColorCmd),
-        raw_tex(string.format('\\begin{tcolorbox}[%s]', table.concat(options, ','))),
+        box_utils.raw_tex(latexTitleColorCmd),
+        box_utils.raw_tex(latexFillColorCmd),
+        box_utils.raw_tex(latexBorderColorCmd),
+        box_utils.raw_tex(string.format('\\begin{tcolorbox}[%s]', table.concat(options, ','))),
     }
 
     local content = rest or ''
     for i = 1, #content do
         table.insert(result, content[i])
     end
-    table.insert(result, raw_tex('\\end{tcolorbox}'))
+    table.insert(result, box_utils.raw_tex('\\end{tcolorbox}'))
     return result
 end
 
 --- Ensure that the longfbox package is loaded.
 function Meta(m)
-    m['header-includes'] = { raw_tex('\\usepackage{tcolorbox}') }
+    m['header-includes'] = { box_utils.raw_tex('\\usepackage{tcolorbox}') }
     return m
 end
 
