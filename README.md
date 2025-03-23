@@ -2,8 +2,8 @@
 
 This is a small collection on how to create boxes oround some text.
 
-- [pandoc-div-box](README#pandoc-div-box)
-- [pandoc-callout-box](README#pandoc-callout-box)
+- [pandoc-div-box](#pandoc-div-box)
+- [pandoc-callout-box](#pandoc-callout-box)
 
 Pandoc lua-filter that creates a box around some text.
 
