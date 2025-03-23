@@ -1,8 +1,29 @@
-on: push
 name: TOC Generator
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  generateTOC:
-    name: TOC Generator
+  generate-toc:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: technote-space/toc-generator@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Generate TOC
+        uses: technote-space/toc-generator@v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
+
+      - name: Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update TOC"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
