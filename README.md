@@ -1,22 +1,19 @@
-# box
+# pandoc-box
+
+This is a small collection on how to create boxes oround some text.
+
+[TOC]
 
 Pandoc lua-filter that creates a box around some text.
 
-## Run 
+## pandoc-div-box
 
-Run this filter e.g. with `pandoc sample.md --lua-filter=box.lua --output=sample.pdf`.
-
-## Usage
-
-The simplest usage would be to wrap three colons `:::` with the `{.box}` attribute around some text. `box` creates a box around it with the default border and fill color of `tcolorbox` (see [sample.pdf](https://github.com/hayribakici/box/blob/main/sample.pdf)).
+Wrap three colons `:::` with the `{.box}` attribute around some text. `box` creates a box around it with the default border and fill color of `tcolorbox` (see [sample_div.pdf](https://github.com/hayribakici/box/blob/main/sample_div.pdf)).
 
 ```markdown
 :::{.box}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-clita kasd gubergren.
+Lorem ipsum dolor sit amet
 
 :::
 ```
@@ -25,13 +22,17 @@ Resulting in
 
 <img src="https://github.com/hayribakici/box/assets/3295340/71f1b8c1-dbfb-4e21-aeae-5a54468910ce" width="300px" />
 
-### Admonition
+### Run
 
-It is also possible to use predefined boxes aka. admonitions. All you need to do is to call the classes `.important`, `.info`, `.danger`, `.warning` and `.plain` (see [sample_types.md](https://github.com/hayribakici/box/blob/main/sample_types.pdf)). 
+Run this filter e.g. with `pandoc sample_div.md --lua-filter=pandoc-div-box.lua --output=sample_div.pdf`.
+
+#### Admonition
+
+It is also possible to use predefined boxes aka. admonitions. All you need to do is to call the classes `.important`, `.info`, `.danger`, `.warning` and `.plain` (see [sample_types.md](https://github.com/hayribakici/box/blob/main/sample_types.pdf)).
 
 <img src="https://github.com/hayribakici/box/assets/3295340/21b49977-36c7-4fa8-b957-7703ab018df6" width="300px" />
 
-### Customizing
+#### Customizing
 
 You can add titles and define fill and border colors with
 
@@ -79,7 +80,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 - **fillcolor**: the background color of the box. Supports `HTML` (`#...`) and [latex `xcolor`](https://en.wikibooks.org/wiki/LaTeX/Colors) colors
 - **bordercolor**: the framecolor of the box. Supports `HTML` (`#...`) and latex `xcolor` colors
 
-## Caveats
+### Caveats
 
 1. So far the display of **images with captions** are not supported, since pandoc centers every image once it has a caption. Latex throws an error message
 
@@ -88,8 +89,8 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
   See the LaTeX manual or LaTeX Companion for explanation.
   Type  H <return>  for immediate help.
-   ...                                              
-                                                  
+   ...
+
   l.108 \centering
   ```
 
@@ -97,7 +98,7 @@ This pandoc filter is basically wrapping a `tcolorbox` around the text in markdo
 
 2. The `tcolorbox` package provides much more options than this filter. If you think that this filter should have more options, any PR redarding this issue is welcome.
 
-## Important information
+### Important information
 
 1. If you have your own `header-includes` file, you need to additionally import `tcolorbox` with `\usepackage{tcolorbox}`.
 2. If you only want to put a quote `>` into a box consider adding an empty title and empty bottom quote like this:
@@ -116,7 +117,18 @@ Resulting in this:
 
 <img src="https://github.com/hayribakici/box/assets/3295340/2d646810-b750-44ce-ac17-873217f05d40" width="300px" />
 
-## Future ideas
+### Future ideas
 
-- allow identification with `crossref` 
+- allow identification with `crossref`
 
+## pandoc-callout-box
+
+## pandoc-div-box
+
+Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a box around text (see [sample_callout.pdf](https://github.com/hayribakici/box/blob/main/sample_callout.pdf)). All types are supported (see obsidian's webpage).
+
+```markdown
+> [!todo] To Do
+> - [ ] Pick up Milk
+
+```
