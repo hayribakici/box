@@ -2,7 +2,8 @@
 
 This is a small collection on how to create boxes oround some text.
 
-[TOC]
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 Pandoc lua-filter that creates a box around some text.
 

@@ -2,17 +2,18 @@ name: Makefile CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: pandoc/latex
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Run test
-      run: make test
+      - name: Run test
+        run: make test
+      - name: TOC Generator
+        uses: technote-space/toc-generator@v4.3.1
