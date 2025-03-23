@@ -2,14 +2,14 @@
 
 This is a small collection on how to create boxes oround some text.
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+- [pandoc-div-box](README#pandoc-div-box)
+- [pandoc-callout-box](README#pandoc-callout-box)
 
 Pandoc lua-filter that creates a box around some text.
 
 ## pandoc-div-box
 
-Wrap three colons `:::` with the `{.box}` attribute around some text. `box` creates a box around it with the default border and fill color of `tcolorbox` (see [sample_div.pdf](https://github.com/hayribakici/box/blob/main/sample_div.pdf)).
+Wrap three colons `:::` with the `{.box}` attribute around some text. `box` creates a box around it with the default border and fill color of `tcolorbox` (see [sample_div.pdf](https://github.com/hayribakici/box/blob/main/samples/sample_div.pdf)).
 
 ```markdown
 :::{.box}
@@ -29,7 +29,7 @@ Run this filter e.g. with `pandoc sample_div.md --lua-filter=pandoc-div-box.lua 
 
 #### Admonition
 
-It is also possible to use predefined boxes aka. admonitions. All you need to do is to call the classes `.important`, `.info`, `.danger`, `.warning` and `.plain` (see [sample_types.md](https://github.com/hayribakici/box/blob/main/sample_types.pdf)).
+It is also possible to use predefined boxes aka. admonitions. All you need to do is to call the classes `.important`, `.info`, `.danger`, `.warning` and `.plain` (see [sample_types.md](https://github.com/hayribakici/box/blob/main/samples/sample_types.pdf)).
 
 <img src="https://github.com/hayribakici/box/assets/3295340/21b49977-36c7-4fa8-b957-7703ab018df6" width="300px" />
 
@@ -126,7 +126,7 @@ Resulting in this:
 
 ## pandoc-div-box
 
-Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a box around text (see [sample_callout.pdf](https://github.com/hayribakici/box/blob/main/sample_callout.pdf)). All types are supported (see obsidian's webpage).
+Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a box around text (see [sample_callout.pdf](https://github.com/hayribakici/box/blob/main/samples/sample_callout.pdf)). All types are supported (see obsidian's webpage).
 
 ```markdown
 > [!todo] To Do
