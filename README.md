@@ -1,11 +1,19 @@
 # pandoc-box
 
-This is a small collection on how to create boxes oround some text.
+Pandoc lua-filter collection that creates a box around text.
 
-- [pandoc-div-box](#pandoc-div-box)
-- [pandoc-callout-box](#pandoc-callout-box)
+There are two options:
 
-Pandoc lua-filter that creates a box around some text.
+1. [pandoc-div-box](#pandoc-div-box), that uses the pandoc markdown div `:::` section. See [sample_div.pdf](samples/more_div_samples.pdf) or
+2. [pandoc-callout-box](#pandoc-callout-box), that uses the [callouts from obsidian](https://help.obsidian.md/callouts) with `> [!info]`. See [sample_callout.pdf](samples/sample_callout.pdf).
+
+## Installation and running filter
+
+Download either [pandoc-div-box.lua](pandoc-div-box.lua) or [pandoc-callout-box.lua](pandoc-callout-box.lua) and
+
+Run filter e.g. with `pandoc your_markdown.md --lua-filter=pandoc-div-box.lua --output=output.pdf` or
+
+`pandoc your_markdown.md --lua-filter=pandoc-callout-box.lua --output=output.pdf` respectively.
 
 ## pandoc-div-box
 
@@ -130,7 +138,3 @@ Use [obsidians's callout syntax](https://help.obsidian.md/callouts) to create a 
 > [!todo] To Do
 > - [ ] Pick up Milk
 ```
-
-### Run
-
-Run this filter e.g. with `pandoc sample_callout.md --lua-filter=pandoc-callout-box.lua --output=sample_callout.pdf`.
