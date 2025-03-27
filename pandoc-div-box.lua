@@ -1,8 +1,6 @@
 -- lua filter for creating boxes around text in Markdown.
 -- Copyright (C) 2023 Onur Hayri Bakici, released under MIT license
 
-local box_utils = require("box_utils")
-
 local classColors = {
     warning = '#E3C414',
     info = '#7289DA',
@@ -12,6 +10,66 @@ local classColors = {
     plain = '#ffffff',
     default = ''
 }
+
+-- box-utils.lua
+local box_utils = {}
+
+local function raw_tex(t)
+    return pandoc.RawBlock('tex', t)
+end
+
+local function isempty(s)
+    return s == nil or s == ''
+end
+
+-- checks whether string starts with a character c
+local function startsWith(s, c)
+    local pos = string.find(s, c)
+    return pos ~= nil and pos == 1
+end
+
+local function sublist(list, startPos, endPos)
+    local sub = {}
+    local len = #list
+    -- Default to the length of the list if endPosition is nil
+    endPos = endPos or len
+    if startPos >= endPos then
+        return sub
+    end
+    if startPos > len or endPos > len then
+        return sub
+    end
+    for i = startPos, endPos do
+        table.insert(sub, list[i])
+    end
+    return sub
+end
+
+local function find_element_at(pandoc_list, pred)
+    for i, el in ipairs(pandoc_list) do
+        if pred(el) then
+            return i
+        end
+    end
+    return -1
+end
+
+local function getColorFromClass(class, classColors)
+    if (classColors[class]) then
+        return classColors[class]
+    end
+    print(string.format('[Warning] invalid admonition type %s. Setting to default', class))
+    return classColors['default']
+end
+
+-- returns a tuple, the color defition
+-- for latex and its name 'c_<htmlColor>'
+local function getColorNameDefinitionTuple(htmlColor)
+    local c = htmlColor:gsub('#', '')
+    local latexCmd = string.format('\\definecolor{c_%s}{HTML}{%s}', c, c:upper())
+    local colorName = 'c_' .. c
+    return latexCmd, colorName
+end
 
 local function popAndStripBlockQuoteElementFromDiv(div, index)
     local elem = ''
@@ -35,12 +93,14 @@ end
 -- returns two values, if it is in the class and its name
 local function isInAdmonitionMode(div)
     for i = 0, #div.attr.classes do
-        if (not box_utils.isempty(div.attr.classes[i])) then
+        if (not isempty(div.attr.classes[i])) then
             return true, div.attr.classes[i]
         end
     end
     return false, ''
 end
+
+
 
 local function process(div)
     if div.attr.classes[1] ~= "box" then return nil end
@@ -54,7 +114,7 @@ local function process(div)
     local admonitionMode, class = isInAdmonitionMode(div)
 
     if (admonitionMode) then
-        borderColor = box_utils.getColorFromClass(class, classColors)
+        borderColor = getColorFromClass(class, classColors)
     else
         fillColor = popAttrFromDiv(div, 'fillcolor')
         borderColor = popAttrFromDiv(div, 'bordercolor')
@@ -63,49 +123,49 @@ local function process(div)
     local options = {}
     local latexFillColorCmd = ''
     local latexBorderColorCmd = ''
-    if (not box_utils.isempty(fillColor)) then
+    if (not isempty(fillColor)) then
         local fcName = ''
-        if (box_utils.startsWith(fillColor, '#')) then
-            latexFillColorCmd, fcName = box_utils.getColorNameDefinitionTuple(fillColor, classColors)
+        if (startsWith(fillColor, '#')) then
+            latexFillColorCmd, fcName = getColorNameDefinitionTuple(fillColor, classColors)
         else
             fcName = fillColor
         end
         table.insert(options, 'colback=' .. fcName)
     end
-    if (not box_utils.isempty(borderColor)) then
+    if (not isempty(borderColor)) then
         local bcName = ''
-        if (box_utils.startsWith(borderColor, '#')) then
-            latexBorderColorCmd, bcName = box_utils.getColorNameDefinitionTuple(borderColor, classColors)
+        if (startsWith(borderColor, '#')) then
+            latexBorderColorCmd, bcName = getColorNameDefinitionTuple(borderColor, classColors)
         else
             bcName = borderColor
         end
         table.insert(options, 'colframe=' .. bcName)
     end
-    if (not box_utils.isempty(title)) then
+    if (not isempty(title)) then
         table.insert(options, 'title=' .. pandoc.utils.stringify(title))
     end
 
     local result = {
-        box_utils.raw_tex(latexFillColorCmd),
-        box_utils.raw_tex(latexBorderColorCmd),
-        box_utils.raw_tex(string.format('\\begin{tcolorbox}[%s]', table.concat(options, ','))),
+        raw_tex(latexFillColorCmd),
+        raw_tex(latexBorderColorCmd),
+        raw_tex(string.format('\\begin{tcolorbox}[%s]', table.concat(options, ','))),
     }
 
     local content = div.content or ''
     for i = 1, #content do
         table.insert(result, content[i])
     end
-    if (not box_utils.isempty(bottom)) then
-        table.insert(result, box_utils.raw_tex('\\tcblower'))
+    if (not isempty(bottom)) then
+        table.insert(result, raw_tex('\\tcblower'))
         table.insert(result, bottom)
     end
-    table.insert(result, box_utils.raw_tex('\\end{tcolorbox}'))
+    table.insert(result, raw_tex('\\end{tcolorbox}'))
     return result
 end
 
 --- Ensure that the longfbox package is loaded.
 function Meta(m)
-    m['header-includes'] = { box_utils.raw_tex('\\usepackage{tcolorbox}') }
+    m['header-includes'] = { raw_tex('\\usepackage{tcolorbox}') }
     return m
 end
 
